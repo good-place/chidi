@@ -6,4 +6,4 @@
 
 (def home-success
   "Home page. Can be used as Ping page"
-  (r/success {:message "Home sweet home."}))
+  (r/success {:message "I am Chidi. Your soulmate."}))

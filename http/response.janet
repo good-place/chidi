@@ -33,6 +33,16 @@
   [body &opt headers]
   (response 415 body headers))
 
+(defn method-not-allowed
+  "Returns not allowed method type response"
+  [body &opt headers]
+  (response 405 body headers))
+
+(defn not-implemented
+  "Returns not implemented method type response"
+  [body &opt headers]
+  (response 501 body headers))
+
 (defn success [body &opt headers]
   "Return success response "
   (response 200 body headers))

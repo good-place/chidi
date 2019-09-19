@@ -7,6 +7,4 @@
                  "https://github.com/janet-lang/json.git"
                  "https://github.com/joy-framework/tester"])
 
-(declare-executable
-  :name "chidi"
-  :entry "server.janet")
+(declare-binscript :main "server")
