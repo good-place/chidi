@@ -47,4 +47,8 @@
   "Return success response "
   (response 200 body headers))
 
+(defn created [body &opt headers]
+  "Return created response "
+  (response 201 body headers))
+
 

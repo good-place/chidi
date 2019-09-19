@@ -2,22 +2,37 @@
 
 (def db "Opens DB" (sql/open "people.db"))
 
-(defn- select [table &opt & stms]
+(defn- select [t &opt & stms]
   (string/join 
-    (array/concat @["SELECT * FROM" table] ;stms ";")
+    (array/concat @["SELECT * FROM" t] ;stms ";")
     " "))
 
-(defn get-records [table]
-  "Get records from the table"
-  (sql/eval db (select table)))
+(defn get-records [t]
+  "Get records from the t"
+  (sql/eval db (select t)))
 
-(defn get-record [table id]
+(defn get-record [t id]
   "Get records from the table by the id"
-  (first (sql/eval db (select table "WHERE ID=:id") {:id id})))
+  (first (sql/eval db (select t "WHERE ID=:id") {:id id})))
 
-(defn find-records [table bnd]
+(defn find-records [t bnd]
   "Get records from the table by the id"
-  (sql/eval db (select table (if (empty? bnd) [] ["WHERE" ;(seq [[k v] :pairs bnd] (string k "=:" k))])) bnd))
+  (sql/eval db (select t (if (empty? bnd) [] ["WHERE" ;(map |(string $ "=:" $) (keys bnd))])) bnd))
+
+(defn insert 
+  "Insert record from body to table"
+  [t body]
+  (sql/eval db (string/join ["INSERT INTO" t "(" (string/join (keys body) ", ") 
+                             ") VALUES (" (string/join (map |(string ":" $) (keys body)) ",") ");"] " ")
+            body)
+  (sql/last-insert-rowid db))
+
+(defn update 
+  "Update record with id from body in table"
+  [t id body]
+  (sql/eval db (string/join ["UPDATE" t " SET " (string/join (map |(string $ "=:" $) (keys body)) ",")
+                             "WHERE id=:id;"] " ")
+            (merge body {:id id})))
 
 (defn close []
   "Closes DB connection"

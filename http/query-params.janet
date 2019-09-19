@@ -16,7 +16,7 @@
         (u/map-vals hu/decode)))
 
 (defn query-params
-  "Parses query string into janet struct. 
+  "Parses query string into janet struct under :query-params key. 
    Keys are keywordized"
   [nextmw]
   (fn [req]

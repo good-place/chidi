@@ -6,7 +6,6 @@
   [nextmw & methods]
   (fn [req] 
     (let [method (hu/get-method req)]
-      (pp method)
       (if (some |(= method $) methods)
         (nextmw req)
         (hr/method-not-allowed 
