@@ -18,7 +18,8 @@ server.
 ## TODO
 - [ ] minimal working example
   - [x] circlet server
-  - [ ] json only services
-  - [ ] sqlite storage
+  - [x] json only services
+  - [x] sqlite storage
+  - [ ] all usable http verbs
 
 [Janet]: https://janet-lang.org/index.html
