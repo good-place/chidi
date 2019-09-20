@@ -60,6 +60,7 @@
   "Creates a router middleware"
   [routes]
   (def compiled-routes (compile-routes routes))
+  (print "> I am routed.")
   (fn [req]
     (let [[action params] (lookup compiled-routes (req :uri))]
       (if action 

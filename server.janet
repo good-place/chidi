@@ -9,6 +9,7 @@
 (defn main 
   "Main entry point for the chidi"
   [&]
+  (print "> Hi. I am Chidi, your soulmate.")
   (-> routes 
      router 
      json-type/only 
