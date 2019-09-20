@@ -1,6 +1,9 @@
 (import sqlite3 :as sql)
 
-(def db "Opens DB" (sql/open "people.db"))
+# FIXME with dyn
+(var db nil)
+
+(defn open-db "Opens DB" [db-file] (set db (sql/open db-file)))
 
 (defn- select [t &opt & stms]
   (string/join 

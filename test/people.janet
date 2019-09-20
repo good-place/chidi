@@ -1,7 +1,16 @@
 (import tester :prefix "")
 (import json)
 (import http/fetch :as fetch)
+
+(import server)
 (import people/setup)
+
+(def db-file "people.test.db")
+
+(people/setup/perform db-file)
+
+(def s (fiber/new (server/main 8140 db-file)))
+
 
 (deftest "All people response"
   (def response (fetch/get "http://127.0.0.1:8130/people"))
