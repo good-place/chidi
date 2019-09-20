@@ -8,7 +8,7 @@
   "Defines routes"
   {"/" cr/home-success
    "/people" (-> people/many (hm/guards :get :post) body query-params)
-   "/people/:id" (-> people/one (hm/guards :get :patch) body)
+   "/people/:id" (-> people/one (hm/guards :get :patch :delete) body)
    :not-found cr/not-found})
 
 

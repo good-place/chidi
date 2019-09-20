@@ -4,8 +4,7 @@
 
 (defn- select [t &opt & stms]
   (string/join 
-    (array/concat @["SELECT * FROM" t] ;stms ";")
-    " "))
+    (array/concat @["SELECT * FROM" t] ;stms ";") " "))
 
 (defn get-records [t]
   "Get records from the t"
@@ -17,7 +16,9 @@
 
 (defn find-records [t bnd]
   "Get records from the table by the id"
-  (sql/eval db (select t (if (empty? bnd) [] ["WHERE" ;(map |(string $ "=:" $) (keys bnd))])) bnd))
+  (sql/eval db (select t (if (empty? bnd) 
+                           [] 
+                           ["WHERE" ;(map |(string $ "=:" $) (keys bnd))])) bnd))
 
 (defn insert 
   "Insert record from body to table"
@@ -33,6 +34,11 @@
   (sql/eval db (string/join ["UPDATE" t " SET " (string/join (map |(string $ "=:" $) (keys body)) ",")
                              "WHERE id=:id;"] " ")
             (merge body {:id id})))
+
+(defn delete 
+  "Delete record with id from table"
+  [t id]
+  (sql/eval db (string/join ["DELETE FROM" t "WHERE id=:id;"] " ") {:id id}))
 
 (defn close []
   "Closes DB connection"
