@@ -5,6 +5,31 @@
 
 (defn open-db "Opens DB" [db-file] (set db (sql/open db-file)))
 
+(defn drop-table 
+  "Drops table. Optional if exists flag"
+  [t]
+  (sql/eval db (string "DROP TABLE IF EXISTS " t " ;")))
+
+(defn create-table 
+  "Creates table with columns. Auto increment id"
+  [t columns]
+  (sql/eval db
+            (string/join
+              ["CREATE TABLE"  t "(id INTEGER PRIMARY KEY AUTOINCREMENT,"
+               (string/join (seq [[c ct] :pairs columns] (string c " " ct)) ", ")
+               ");"]
+              " ")))
+
+(defn begin-transaction 
+  "Begins transaction"
+  []
+  (sql/eval db "BEGIN TRANSACTION"))
+
+(defn end-transaction 
+  "Ends transaction"
+  []
+  (sql/eval db "END TRANSACTION"))
+
 (defn- select [t &opt & stms]
   (string/join 
     (array/concat @["SELECT * FROM" t] ;stms ";") " "))
@@ -45,5 +70,6 @@
 
 (defn close []
   "Closes DB connection"
+  (sql/eval db "PRAGMA optimize;")
   (sql/close db))
 
