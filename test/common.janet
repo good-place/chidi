@@ -1,11 +1,14 @@
 (import tester :prefix "")
 (import http/fetch :as fetch)
 
+(import test/utils :prefix "")
+
 (deftest "Home page"
-  (test "Message" 
-        (= (fetch/get "http://127.0.0.1:8130/") 
+  (test "Greetings message" 
+        (= (fetch/get (on-server)) 
            "{\"message\":\"Hi. I am Chidi, your soulmate.\"}")))
 
 (deftest "Not found"
-  (test "Message" (= (fetch/get "http://127.0.0.1:8130/not-found")
-                     "{\"message\":\"Not Found.\"}")))
+  (test "Not fount message" 
+        (= (fetch/get (on-server "not-found"))
+           "{\"message\":\"Not Found.\"}")))

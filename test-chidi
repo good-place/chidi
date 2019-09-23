@@ -1,0 +1,4 @@
+#!/usr/bin/env janet
+
+(import server) (server/main 8140 "chidi.test.db")
+

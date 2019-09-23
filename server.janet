@@ -8,11 +8,15 @@
 
 (defn main 
   "Main entry point for the chidi"
-  [&]
+  [&opt port db-file]
+  (default port 8130)
+  (default db-file "chidi.db")
+  (su/open-db db-file)
+
   (print "> Hi. I am Chidi, your soulmate.")
   (-> routes 
-     router 
-     json-type/only 
-     circlet/logger 
-     (circlet/server 8130))
+      router 
+      json-type/only 
+      circlet/logger 
+      (circlet/server port))
   (su/close))
