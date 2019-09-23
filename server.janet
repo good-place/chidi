@@ -10,7 +10,7 @@
   "Main entry point for the chidi"
   [&opt port db-file]
   (default port 8130)
-  (default db-file "people.db")
+  (default db-file "chidi.db")
   (su/open-db db-file)
 
   (print "> Hi. I am Chidi, your soulmate.")

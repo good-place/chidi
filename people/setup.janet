@@ -18,9 +18,5 @@
     (sql/eval su/db `INSERT INTO people (name, phone, gender) VALUES(:name, :phone, :gender);` person))
   (sql/eval su/db "END TRANSACTION")
 
-  (let [records (sql/eval su/db `SELECT * FROM people;`)]
-    (print "There are " (length records) " records in DB:")
-    (loop [record :in records] (pp record)))
-
   (su/close))
 
