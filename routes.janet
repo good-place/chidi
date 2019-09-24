@@ -1,14 +1,11 @@
-(import http/query-params :prefix "")
-(import http/methods :as hm)
-(import http/body :prefix "")
 (import common/responses :as cr)
-(import people/responses :as people)
+(import people/service :as people)
 
 (def routes
   "Defines routes"
-  {"/" cr/home-success
-   "/people" (-> people/many (hm/guards :get :post) body query-params)
-   "/people/:id" (-> people/one (hm/guards :get :patch :delete) body)
-   :not-found cr/not-found})
+  (merge 
+    {"/" cr/home-success
+    :not-found cr/not-found}
+    people/routes))
 
 

@@ -1,6 +1,9 @@
 (import utils :as u)
 (import http/response :as hr)
 (import http/utils :as hu)
+(import http/body :prefix "")
+(import http/query-params :prefix "")
+(import http/methods :as hm)
 (import sql/utils :as su)
 
 (def sqt "SQL table this service uses" :people)
@@ -52,3 +55,8 @@
         :patch (one-patch id (allowed-keys (req :body)))
         :delete (one-delete id)))
     (hr/bad-request "ID has bad type, it should be number.")))
+
+(def routes
+  {"/people" (-> many (hm/guards :get :post) body query-params)
+   "/people/:id" (-> one (hm/guards :get :patch :delete) body)})
+
