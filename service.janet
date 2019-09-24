@@ -1,5 +1,3 @@
-(import utils)
-
 # Proposed macro api
 # (defservice 
 # name of the service if map key is the name, value is singular name
@@ -12,32 +10,50 @@
 #   {:many [:get :post] 
 #    :one [:get :patch :delete]})
 
-(defmacro defservice 
+(defmacro defservice
   "Defines new service" # TODO document
-  [name &opt storage methods] 
+  [name &opt storage] 
   ~(tuple
+     (def name ,name)
      (def sqt ,(or (storage :table) name))
      ,(if-let [ak (storage :allowed-keys)] 
         ~(defn allowed-keys [d] (utils/select-keys d ,(storage :allowed-keys)))
-        '(defn allowed-keys [&] identity))
-      '(defn- one-get [id]
-        (let [record (su/get-record sqt id)]
-            (if record
-              (hr/success record)
-              (hr/not-found {:message (string "Person with id " id " has not been found")}))))
-      '(defn- one-patch
-        [id body]
-        (su/update sqt id body)
-        (hr/success {:message (string "Person id " id " was successfuly updated")}))
-      '(defn- one-delete [id]
-        (su/delete sqt id)
-        (hr/success {:message (string "Person id " id " was successfuly deleted")}))
-      '(defn one [req]
-        (if-let [id (scan-number ((req :params) :id))]
-          (let [method (hu/get-method req)]
-            (case method
-              :get (one-get id)
-              :patch (one-patch id (allowed-keys (req :body)))
-              :delete (one-delete id)))
-          (hr/bad-request "ID has bad type, it should be number.")))))
+        '(defn allowed-keys [&] identity))))
+
+(defmacro many 
+  "Add handler for req on many"
+  [methods] 
+  ~(defn many [req]
+            ,(pp (seq [method :in methods]
+                 (case method 
+                   :get 
+                   '(defn- many-get [qp]
+                      (let [records (if qp
+                                      (sql/utils/find-records sqt (allowed-keys qp)) 
+                                      (sql/utils/get-records sqt))]
+                        (http/utils/success records)))
+                   :post
+                   '(defn- many-post [body]
+                      (let [id (sql/utils/insert sqt (allowed-keys body))
+                            p (sql/utils/get-record sqt id)]
+                        (http/utils/created p {"Location" (string "/" name "/" id)}))))))
+
+            ;,(freeze (keep identity
+                    (seq [method :in methods]
+                         (case method 
+                           :get 
+                           '(defn- many-get [qp]
+                              (let [records (if qp
+                                              (sql/utils/find-records sqt (allowed-keys qp)) 
+                                              (sql/utils/get-records sqt))]
+                                (http/response/success records)))
+                           :post
+                           '(defn- many-post [body]
+                              (let [id (sql/utils/insert sqt (allowed-keys body))
+                                    p (sql/utils/get-record sqt id)]
+                                (http/response/created p {"Location" (string "/" name "/" id)})))))))  
+         (let [method (http/utils/get-method req)]
+             (case method
+               :get (many-get (req :query-params))
+               :post (many-post (req :body))))))
 

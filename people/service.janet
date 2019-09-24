@@ -1,34 +1,15 @@
-(import utils :as u)
+(import utils)
 (import http/response :as hr)
-(import http/utils :as hu)
+(import http/util)
 (import http/body :prefix "")
 (import http/query-params :prefix "")
 (import http/methods :as hm)
-(import sql/utils :as su)
+(import sql/utils)
+(import service)
 
-(def sqt "SQL table this service uses" :people)
+(service/defservice :people {:allowed-keys [:name]})
 
-(defn- allowed-keys [d]
-  (u/select-keys d [:name :phone :gender]))
-
-(defn- many-get [qp]
-  (let [records (if qp 
-                      (su/find-records sqt (allowed-keys qp)) 
-                      (su/get-records sqt))]
-        (hr/success records)))
-
-(defn- many-post [body]
-  (let [id (su/insert sqt (allowed-keys body))
-        p (su/get-record sqt id)]
-   (hr/created p {"Location" (string "/people/" id)})))
-
-(defn many
-  "Renders many people"
-  [req]
-  (let [method (hu/get-method req)]
-    (case method
-      :get (many-get (req :query-params))
-      :post (many-post (req :body)))))
+(service/many [:get :post])
 
 (defn- one-get [id]
   (let [record (su/get-record sqt id)]
@@ -57,6 +38,7 @@
     (hr/bad-request "ID has bad type, it should be number.")))
 
 (def routes
-  {"/people" (-> many (hm/guards :get :post) body query-params)
-   "/people/:id" (-> one (hm/guards :get :patch :delete) body)})
+  # {"/people" (-> many (hm/guards :get :post) body query-params)
+   # "/people/:id" (-> one (hm/guards :get :patch :delete) body)}
+ {} )
 
