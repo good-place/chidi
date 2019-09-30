@@ -1,4 +1,3 @@
-# @todo rename 
 (import chidi/http/response :as r)
 
 (def not-found 

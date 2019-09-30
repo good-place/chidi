@@ -1,5 +1,5 @@
-(import ./utils :as hu)
-(import ./response :as hr)
+(import chidi/http/utils :as hu)
+(import chidi/http/response :as hr)
 
 (defn guards
   "Middleware for quarding only some http methods"
