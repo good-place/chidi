@@ -4,6 +4,7 @@
   :dependencies ["https://github.com/janet-lang/circlet.git"
                  "https://github.com/janet-lang/sqlite3.git"
                  "https://github.com/janet-lang/json.git"
+                 "https://github.com/pepe/trolley.git"
                  "https://github.com/joy-framework/tester"])
 
 (declare-binscript :main "chidi")

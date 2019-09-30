@@ -1,3 +1,4 @@
+# @todo test server must be running
 (import tester :prefix "")
 (import http/fetch :as fetch)
 
