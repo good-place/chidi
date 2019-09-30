@@ -2,7 +2,7 @@
 (import json)
 (import ../chidi/http/fetch :as fetch)
 
-(import ../chidi/people/setup :as setup)
+(import ../app/people/setup :as setup)
 (import ./utils :prefix "")
 
 (def db-file "chidi.test.db")
