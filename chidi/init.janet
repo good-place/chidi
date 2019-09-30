@@ -1,12 +1,13 @@
 (import circlet)
 
-(import ./routes :as routes)
 (import ./http/router :as router)
 (import ./http/json-type :as json-type)
 (import ./sql/utils :as su)
 
-(defn main 
-  "Main entry point for the chidi"
+(import ../app/routes :as routes)
+
+(defn server
+  "Runs http server"
   [&opt port db-file]
   (default port 8130)
   (default db-file "chidi.db")

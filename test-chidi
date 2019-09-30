@@ -1,5 +1,6 @@
 #!/usr/bin/env janet
 
 (import chidi) 
-(chidi/main 8140 "chidi.test.db")
+
+(chidi/server 8140 "chidi.test.db")
 

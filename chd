@@ -2,4 +2,4 @@
 
 (import chidi)
 
-(chidi/main)
+(chidi/server)

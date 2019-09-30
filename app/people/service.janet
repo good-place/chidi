@@ -1,10 +1,10 @@
-(import ../utils :as u)
-(import ../http/response :as hr)
-(import ../http/utils :as hu)
-(import ../http/body :prefix "")
-(import ../http/query-params :prefix "")
-(import ../http/methods :as hm)
-(import ../sql/utils :as su)
+(import chidi/utils :as u)
+(import chidi/http/response :as hr)
+(import chidi/http/utils :as hu)
+(import chidi/http/body :prefix "")
+(import chidi/http/query-params :prefix "")
+(import chidi/http/methods :as hm)
+(import chidi/sql/utils :as su)
 
 (def sqt "SQL table this service uses" :people)
 
