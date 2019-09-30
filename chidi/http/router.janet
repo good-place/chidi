@@ -1,7 +1,7 @@
 (import circlet)
 (import trolley)
 
-(defn router
+(defn make
   "Creates a router middleware"
   [routes]
   (def r (trolley/router routes))

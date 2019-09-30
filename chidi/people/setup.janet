@@ -1,5 +1,5 @@
 (import sqlite3 :as sql)
-(import sql/utils :as su)
+(import ../sql/utils :as su)
 
 (def- people 
   [{:name "John Doe" :phone "77788899" :gender "male"}

@@ -1,10 +1,10 @@
-(import utils :as u)
-(import http/response :as hr)
-(import http/utils :as hu)
-(import http/body :prefix "")
-(import http/query-params :prefix "")
-(import http/methods :as hm)
-(import sql/utils :as su)
+(import ../utils :as u)
+(import ../http/response :as hr)
+(import ../http/utils :as hu)
+(import ../http/body :prefix "")
+(import ../http/query-params :prefix "")
+(import ../http/methods :as hm)
+(import ../sql/utils :as su)
 
 (def sqt "SQL table this service uses" :people)
 

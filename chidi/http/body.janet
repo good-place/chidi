@@ -1,5 +1,5 @@
 (import json)
-(import utils :as u)
+(import ../utils :as u)
 
 (defn body 
   "Parse body into Janet struct under :body key"

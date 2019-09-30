@@ -1,5 +1,5 @@
-(import utils :as u)
-(import http/utils :as hu)
+(import ../utils :as u)
+(import ./utils :as hu)
 
 (def- query-string-grammar
   (peg/compile 

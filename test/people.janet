@@ -1,13 +1,13 @@
 (import tester :prefix "")
 (import json)
-(import http/fetch :as fetch)
+(import ../chidi/http/fetch :as fetch)
 
-(import people/setup)
-(import test/utils :prefix "")
+(import ../chidi/people/setup :as setup)
+(import ./utils :prefix "")
 
 (def db-file "chidi.test.db")
 
-(people/setup/perform db-file)
+(setup/perform db-file)
 
 
 (deftest "All people response"

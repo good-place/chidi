@@ -1,7 +1,7 @@
-(import common/responses :as cr)
-(import people/service :as people)
+(import ./common/responses :as cr)
+(import ./people/service :as people)
 
-(def routes
+(def all
   "Defines routes"
   (merge 
     {"/" cr/home-success

@@ -1,10 +1,9 @@
 (import circlet)
 
-(import routes :prefix "")
-(import http/router :prefix "")
-(import http/json-type :as json-type)
-(import sql/utils :as su)
-
+(import ./routes :as routes)
+(import ./http/router :as router)
+(import ./http/json-type :as json-type)
+(import ./sql/utils :as su)
 
 (defn main 
   "Main entry point for the chidi"
@@ -14,8 +13,8 @@
   (su/open-db db-file)
 
   (print "> Hi. I am Chidi, your soulmate.")
-  (-> routes 
-      router 
+  (-> routes/all
+      router/make 
       json-type/only 
       circlet/logger 
       (circlet/server port))

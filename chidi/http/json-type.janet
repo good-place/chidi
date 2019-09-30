@@ -1,4 +1,4 @@
-(import http/response :as r)
+(import ./response :as r)
 
 (defn only 
   "Middleware for ensuring only json content type"
