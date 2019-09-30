@@ -15,9 +15,13 @@ At the begining it will be only backend story. There will be no generators
 ## Usage
 
 You need to have [Janet] language and all dependencies installed. Then you can
-just run `./chidi`. For now only home with basic message and not found page,
+just run `./chd`. For now only home with basic message and not found page,
 are implemented. Also only 'application/json' content-type is accepted by the
 server.
+
+## Tests
+
+To run tests, first run test server with `./test-chidi` then with `jpm test`.
 
 ## TODO
 - [ ] minimal working example
@@ -27,3 +31,4 @@ server.
   - [ ] all usable http verbs
 
 [Janet]: https://janet-lang.org/index.html
+[Feathers]: https://feathersjs.com/
