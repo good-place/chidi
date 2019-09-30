@@ -7,7 +7,7 @@
 ## Motivation
 
 To create and maintain framework for real-time applicaitons and REST APIs akin
-to [Feathers] plus JAMStack in [Janet] programming language. 
+to [Feathers] plus [JAMStack] in [Janet] programming language. 
 
 At the begining it will be only backend story. Applicaiton related code will be
 generated with [Mendoza]. All html will be static, generated also by [Mendoza].
@@ -37,3 +37,4 @@ To run tests, first run test server with `./test-chidi` then with `jpm test`.
 [Janet]: https://janet-lang.org/index.html
 [Feathers]: https://feathersjs.com/
 [Mendoza]: https://github.com/bakpakin/mendoza
+[JAMStack]: https://jamstack.org/
