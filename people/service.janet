@@ -1,11 +1,11 @@
+(import service)
 (import utils)
 (import http/response :as hr)
-(import http/util)
+(import http/utils)
 (import http/body :prefix "")
 (import http/query-params :prefix "")
 (import http/methods :as hm)
 (import sql/utils)
-(import service)
 
 (service/defservice :people {:allowed-keys [:name]})
 
