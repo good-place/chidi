@@ -2,5 +2,6 @@
 
 (print "=== Recreating db ===")
 (import app/people/setup) (app/people/setup/perform "chidi.db")
+(import app/trees/setup) (app/trees/setup/perform "chidi.db")
 (print "--- Done ---")
 

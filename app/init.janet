@@ -4,8 +4,9 @@
 (import chidi/sql/utils :as su)
 (import app/common/service :as common)
 (import app/people/service :as people)
+(import app/trees/service :as trees)
 
-(def- routes (merge common/routes people/routes))
+(def- routes (merge common/routes people/routes trees/routes))
 
 (def server 
   (-> routes
