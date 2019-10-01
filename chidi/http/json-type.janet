@@ -1,4 +1,4 @@
-(import http/response :as r)
+(import chidi/http/response :as r)
 
 (defn only 
   "Middleware for ensuring only json content type"

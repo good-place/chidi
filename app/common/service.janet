@@ -1,4 +1,4 @@
-(import http/response :as r)
+(import chidi/http/response :as r)
 
 (def not-found 
   "Page not found response"

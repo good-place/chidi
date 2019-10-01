@@ -1,11 +1,12 @@
+<<<<<<< HEAD:people/service.janet
 (import service)
-(import utils)
-(import http/response :as hr)
-(import http/utils)
-(import http/body :prefix "")
-(import http/query-params :prefix "")
-(import http/methods :as hm)
-(import sql/utils)
+(import chidi/utils :as u)
+(import chidi/http/response :as hr)
+(import chidi/http/utils :as hu)
+(import chidi/http/body :prefix "")
+(import chidi/http/query-params :prefix "")
+(import chidi/http/methods :as hm)
+(import chidi/sql/utils :as su)
 
 (service/defservice :people {:allowed-keys [:name]})
 

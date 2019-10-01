@@ -1,7 +1,9 @@
+# @todo test server must be running
 (import tester :prefix "")
-(import http/fetch :as fetch)
+(import chidi/http/fetch :as fetch)
+(import chidi/test/utils :prefix "")
 
-(import test/utils :prefix "")
+(ensure-running-server)
 
 (deftest "Home page"
   (test "Greetings message" 

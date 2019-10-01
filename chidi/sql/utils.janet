@@ -1,6 +1,5 @@
 (import sqlite3 :as sql)
 
-# FIXME with dyn
 (var db nil)
 
 (defn open-db "Opens DB" [db-file] (set db (sql/open db-file)))

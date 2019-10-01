@@ -1,21 +1,21 @@
 (import circlet)
 
-(import routes :prefix "")
-(import http/router :prefix "")
-(import http/json-type :as json-type)
-(import sql/utils :as su)
+(import chidi/http/router :as router)
+(import chidi/http/json-type :as json-type)
+(import chidi/sql/utils :as su)
 
+(import app)
 
-(defn main 
-  "Main entry point for the chidi"
+(defn server
+  "Runs http server"
   [&opt port db-file]
   (default port 8130)
   (default db-file "chidi.db")
   (su/open-db db-file)
 
   (print "> Hi. I am Chidi, your soulmate.")
-  (-> routes 
-      router 
+  (-> app/routes
+      router/make 
       json-type/only 
       circlet/logger 
       (circlet/server port))

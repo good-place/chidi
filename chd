@@ -1,0 +1,5 @@
+#!/usr/bin/env janet
+
+(import chidi)
+
+(chidi/server)

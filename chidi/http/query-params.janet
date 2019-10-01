@@ -1,5 +1,5 @@
-(import utils :as u)
-(import http/utils :as hu)
+(import chidi/utils :as u)
+(import chidi/http/utils :as hu)
 
 (def- query-string-grammar
   (peg/compile 
