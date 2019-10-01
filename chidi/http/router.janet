@@ -5,7 +5,7 @@
   "Creates a router middleware"
   [routes]
   (def r (trolley/router routes))
-  (print "> I am routed.")
+  (print "> I am trolley driver")
   (fn [req]
     (let [[action params] (r (req :uri))]
       (if action 

@@ -1,6 +1,6 @@
 #!/usr/bin/env janet
 
 (print "=== Recreating db ===")
-(import chidi/people/setup) (chidi/people/setup/perform "chidi.db")
+(import app/people/setup) (app/people/setup/perform "chidi.db")
 (print "--- Done ---")
 

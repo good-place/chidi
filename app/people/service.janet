@@ -1,45 +1,14 @@
-<<<<<<< HEAD:people/service.janet
-(import service)
-(import chidi/utils :as u)
-(import chidi/http/response :as hr)
-(import chidi/http/utils :as hu)
+(import chidi/service :as service)
 (import chidi/http/body :prefix "")
 (import chidi/http/query-params :prefix "")
-(import chidi/http/methods :as hm)
-(import chidi/sql/utils :as su)
 
 (service/defservice :people {:allowed-keys [:name]})
 
 (service/many [:get :post])
 
-(defn- one-get [id]
-  (let [record (su/get-record sqt id)]
-      (if record
-        (hr/success record)
-        (hr/not-found {:message (string "Person with id " id " has not been found")}))))
-
-(defn- one-patch
-  [id body]
-  (su/update sqt id body)
-  (hr/success {:message (string "Person id " id " was successfuly updated")}))
-
-(defn- one-delete [id]
-  (su/delete sqt id)
-  (hr/success {:message (string "Person id " id " was successfuly deleted")}))
-
-(defn one
-  "Renders one person"
-  [req]
-  (if-let [id (scan-number ((req :params) :id))]
-    (let [method (hu/get-method req)]
-      (case method
-        :get (one-get id)
-        :patch (one-patch id (allowed-keys (req :body)))
-        :delete (one-delete id)))
-    (hr/bad-request "ID has bad type, it should be number.")))
+(service/one [:get :post :delete])
 
 (def routes
-  # {"/people" (-> many (hm/guards :get :post) body query-params)
-   # "/people/:id" (-> one (hm/guards :get :patch :delete) body)}
- {} )
+  {"/people" (-> many body query-params)
+   "/people/:id" (-> one body)})
 
