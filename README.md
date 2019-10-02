@@ -31,6 +31,7 @@ To run tests, first run test server with `./test-chidi` then with `jpm test`.
 
 ## TODO
 
+- [ ] make chd binary only binary with argparse
 - [ ] remove test app and tests
 - [ ] make standalone lib
 - [x] add service macros
