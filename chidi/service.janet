@@ -59,8 +59,9 @@
                  ~(do 
                     (,sql/utils/update sqt id body)
                     (,http/response/success {:message (string "Person id " id " was successfuly updated")}))
-                 ~(,http/response/method-not-allowed {:message "Method GET is not allowed"}) )
-        "DELETE" ,(if (some |(= $ :patch) methods)
+                 ~(,http/response/method-not-allowed {:message "Method PATCH is not allowed"}))
+        "DELETE" ,(if (some |(= $ :delete) methods)
                    ~(do 
                       (,sql/utils/delete sqt id)
-                      (,http/response/success {:message (string "Person id " id " was successfuly deleted")})))))))
+                      (,http/response/success {:message (string "Person id " id " was successfuly deleted")}))
+                   ~(,http/response/method-not-allowed {:message "Method PATCH is not allowed"}))))))

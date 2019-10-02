@@ -2,7 +2,7 @@
 (import chidi/http/body :prefix "")
 (import chidi/http/query-params :prefix "")
 
-(service/defservice :people {:allowed-keys [:phone :tree]})
+(service/defservice :people {:allowed-keys [:phone :tree :name]})
 
 (service/many [:get :post])
 
