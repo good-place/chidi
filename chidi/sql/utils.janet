@@ -29,23 +29,24 @@
   []
   (sql/eval db "END TRANSACTION"))
 
-(defn- select [t &opt & stms]
-  (string/join 
-    (array/concat @["SELECT * FROM" t] ;stms ";") " "))
+(defn- select [t &opt stms bnds]
+  (default stms [])
+  (default bnds {})
+  (sql/eval db (string/join (array/concat @["SELECT * FROM" t] ;stms ";") " ") bnds))
 
 (defn get-records [t]
   "Get records from the t"
-  (sql/eval db (select t)))
+  (select t))
 
 (defn get-record [t id]
   "Get records from the table by the id"
-  (first (sql/eval db (select t "WHERE ID=:id") {:id id})))
+  (first (select t ["WHERE ID=:id"] {:id id})))
 
 (defn find-records [t bnd]
   "Get records from the table by the id"
-  (sql/eval db (select t (if (empty? bnd) 
-                           [] 
-                           ["WHERE" ;(map |(string $ "=:" $) (keys bnd))])) bnd))
+  (select t (if (empty? bnd) 
+              [] 
+              ["WHERE" ;(map |(string $ "=:" $) (keys bnd))]) bnd))
 
 (defn insert 
   "Insert record from body to table"

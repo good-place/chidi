@@ -36,8 +36,9 @@
   (test "There should be 8 people" (= (length all-people) 8)))
 
 (deftest "Update one person"
-  (def response (fetch/patch (on-server "people/2") 
-                            (json/encode {:name "Nu One" :phone "66666666" :gender "all"})))
+  (def response 
+    (fetch/patch (on-server "people/2")
+                 (json/encode {:name "Nu One" :phone "66666666" :gender "all"})))
   (test "Non empty response" (not (empty? response)))
   (def decoded (json/decode response))
   (test "Valid json" (dictionary? decoded))

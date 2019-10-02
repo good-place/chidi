@@ -9,6 +9,6 @@
 
 (defn ensure-running-server []
   (when (empty? (fetch/get (on-server))) 
-   (error "It looks like your text server is not running. Run it with `./test-chidi`")))
+   (error "It looks like your test server is not running. Run it with `./test-chidi`")))
 
 

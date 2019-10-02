@@ -1,8 +1,6 @@
 (import circlet)
-
-(import chidi/http/router :as router)
-(import chidi/http/json-type :as json-type)
 (import chidi/sql/utils :as su)
+
 
 (import app)
 
@@ -14,9 +12,6 @@
   (su/open-db db-file)
 
   (print "> Hi. I am Chidi, your soulmate.")
-  (-> app/routes
-      router/make 
-      json-type/only 
-      circlet/logger 
+  (-> app/server
       (circlet/server port))
   (su/close))

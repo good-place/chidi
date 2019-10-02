@@ -2,13 +2,13 @@
 (import chidi/http/body :prefix "")
 (import chidi/http/query-params :prefix "")
 
-(service/defservice :people {:allowed-keys [:phone :tree :name]})
+(service/defservice :trees {:allowed-keys [:size :specie]})
 
 (service/many [:get :post])
 
 (service/one [:get :patch :delete])
 
 (def routes
-  {"/people" (-> many body query-params)
-   "/people/:id" (-> one body)})
+  {"/trees" (-> many body query-params)
+   "/trees/:id" (-> one body)})
 
