@@ -1,5 +1,6 @@
 #!/usr/bin/env janet
 (import chidi)
+(import chidi/generate)
 (import argparse :prefix "")
 
 (def argparse-params
@@ -7,9 +8,13 @@
    :default {:kind :option
              :default "server"
              :help "Command to run"}
+   "service" {:kind :option
+              :help "Name of the service to generate"}
+   "setup" {:kind :flag
+            :help "Generate setup with service?"}
    "db-file" {:kind :option 
-         :help "Database file"
-         :default "chidi.db"}
+              :help "Database file"
+              :default "chidi.db"}
    "port" {:king :option 
            :help "HTTP server port"
            :default 8130}])
@@ -17,7 +22,6 @@
 (let [res (argparse ;argparse-params)]
   (unless res
     (os/exit 1))
-  (pp res)
   (let [{:default command "port" port "db-file" db-file} res]
     (case command
      "server" (chidi/server port db-file)
@@ -26,6 +30,11 @@
                          db-file (if (not= db-file "chidi.db") db-file "chidi.test.db")]
                      (with [f (file/open ".test-port" :w)] (file/write f (string port)))
                      (chidi/server port db-file)) 
+     "generate" (if-let [service (res "service")]
+                  (do 
+                    (chidi/generate/service service)
+                    (when (res "setup") (chidi/generate/setup service)))
+                  (error "You have specifiy service name to generate"))
      (error "This command I do not recognize"))))
 
 
