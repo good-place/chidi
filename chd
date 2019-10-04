@@ -24,6 +24,7 @@
      "setup" (chidi/setup db-file)
      "test-server" (let [port (if (not= port 8130) port 8140)
                          db-file (if (not= db-file "chidi.db") db-file "chidi.test.db")]
+                     (with [f (file/open ".test-port" :w)] (file/write f (string port)))
                      (chidi/server port db-file)) 
      (error "This command I do not recognize"))))
 

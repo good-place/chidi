@@ -1,14 +1,15 @@
 (import chidi/http/fetch :as fetch)
 
-(def- server "http://localhost:8140/")
+(var port 8140)
+(with [f (file/open ".test-port" :r)] 
+   (set port (->  f (file/read :all) scan-number)))
 
 (defn on-server [&opt path] 
-  (if path 
-    (string server path)
-    server))
+  (string "http://localhost:" port "/" (or path "")))
 
 (defn ensure-running-server []
+  (pp (on-server))
   (when (empty? (fetch/get (on-server))) 
-   (error "It looks like your test server is not running. Run it with `./test-chidi`")))
+   (error "It looks like your test server is not running. Run it with `./chd test-server`")))
 
 
