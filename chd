@@ -1,5 +1,30 @@
 #!/usr/bin/env janet
-
 (import chidi)
+(import argparse :prefix "")
 
-(chidi/server)
+(def argparse-params
+  ["Chidi CLI. Used to run everything."
+   :default {:kind :option
+             :default "server"
+             :help "Command to run"}
+   "db-file" {:kind :option 
+         :help "Database file"
+         :default "chidi.db"}
+   "port" {:king :option 
+           :help "HTTP server port"
+           :default 8130}])
+
+(let [res (argparse ;argparse-params)]
+  (unless res
+    (os/exit 1))
+  (pp res)
+  (let [{:default command "port" port "db-file" db-file} res]
+    (case command
+     "server" (chidi/server port db-file)
+     "setup" (chidi/setup db-file)
+     "test-server" (let [port (if (not= port 8130) port 8140)
+                         db-file (if (not= db-file "chidi.db") db-file "chidi.test.db")]
+                     (chidi/server port db-file)) 
+     (error "This command I do not recognize"))))
+
+

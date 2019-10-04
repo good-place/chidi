@@ -4,9 +4,14 @@
 
 (import app)
 
+(defn setup 
+  "Set ups chidi db"
+  [db-file]
+  (app/setup db-file))
+
 (defn server
   "Runs http server"
-  [&opt port db-file]
+  [port db-file]
   (default port 8130)
   (default db-file "chidi.db")
   (su/open-db db-file)
