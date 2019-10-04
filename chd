@@ -8,6 +8,8 @@
    :default {:kind :option
              :default "server"
              :help "Command to run"}
+   "app-name" {:kind :option
+               :help "Name of the app to generate the stub for"}
    "service" {:kind :option
               :help "Name of the service to generate"}
    "setup" {:kind :flag
@@ -30,11 +32,13 @@
                          db-file (if (not= db-file "chidi.db") db-file "chidi.test.db")]
                      (with [f (file/open ".test-port" :w)] (file/write f (string port)))
                      (chidi/server port db-file)) 
-     "generate" (if-let [service (res "service")]
-                  (do 
-                    (chidi/generate/service service)
-                    (when (res "setup") (chidi/generate/setup service)))
-                  (error "You have specifiy service name to generate"))
+     "generate" (if-let [name (res "app-name")]
+                  (chidi/generate/app name)
+                  (if-let [service (res "service")]
+                   (do 
+                     (chidi/generate/service service)
+                     (when (res "setup") (chidi/generate/setup service)))
+                   (error "You have to specifiy service name to generate")))
      (error "This command I do not recognize"))))
 
 

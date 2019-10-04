@@ -1,3 +1,42 @@
+(defn app 
+  "Generates app directory structure"
+  [name]
+
+  (def pf
+    (string
+``(declare-project
+  :name "`` name ``"
+  :description "Really great API" # @fixme with some real desc here please
+  :dependencies ["https://github.com/pepe/chidi.git"
+                 "https://github.com/joy-framework/tester"])``))
+
+  (def ai
+``(import circlet)
+(import chidi/http/router :as router)
+(import chidi/http/json-type :as json-type)
+(import chidi/sql/utils :as su)
+# @fixme add services and setups imports
+
+(def- routes (merge )) # @fixme add services' routes
+
+(defn setup [db-file]
+  (print "=== Recreating db ===")
+  # @fixme add setups
+  (print "--- Done ---"))
+
+(def server 
+  (-> routes
+      router/make 
+      json-type/only 
+      circlet/logger))``)
+
+  (os/mkdir name)
+  (os/mkdir (string name "/app"))
+  (with [f (file/open (string name "/project.janet") :w)]
+     (file/write f pf))
+  (with [f (file/open (string name "/app/init.janet") :w)]
+     (file/write f ai)))
+
 (defn service 
   "Generates service stub"
   [sn]
