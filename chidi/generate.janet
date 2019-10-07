@@ -1,6 +1,7 @@
 (defn app 
   "Generates app directory structure"
   [name]
+  (print "Generating new app -> " name " <-")
 
   (def pf
     (string
@@ -35,7 +36,9 @@
   (with [f (file/open (string name "/project.janet") :w)]
      (file/write f pf))
   (with [f (file/open (string name "/app/init.janet") :w)]
-     (file/write f ai)))
+     (file/write f ai))
+  (print "App " name " generated")
+  (print "To start work with it cd " name " and run chd --help"))
 
 (defn service 
   "Generates service stub"

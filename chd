@@ -1,7 +1,8 @@
 #!/usr/bin/env janet
+(import argparse :prefix "")
+
 (import chidi)
 (import chidi/generate)
-(import argparse :prefix "")
 
 (def argparse-params
   ["Chidi CLI. Used to run everything."
@@ -26,12 +27,12 @@
     (os/exit 1))
   (let [{:default command "port" port "db-file" db-file} res]
     (case command
-     "server" (chidi/server port db-file)
-     "setup" (chidi/setup db-file)
+     "server" (chidi/app-server port db-file)
+     "setup" (chidi/app-setup db-file)
      "test-server" (let [port (if (not= port 8130) port 8140)
                          db-file (if (not= db-file "chidi.db") db-file "chidi.test.db")]
                      (with [f (file/open ".test-port" :w)] (file/write f (string port)))
-                     (chidi/server port db-file)) 
+                     (chidi/app-server port db-file)) 
      "generate" (if-let [name (res "app-name")]
                   (chidi/generate/app name)
                   (if-let [service (res "service")]

@@ -9,6 +9,6 @@
                  "https://github.com/pepe/trolley.git"
                  "https://github.com/joy-framework/tester"])
 
-(declare-source :source ["chidi/init.janet"])
+(declare-source :source ["chidi"])
 
 (declare-binscript :main "chd")
