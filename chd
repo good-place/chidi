@@ -1,31 +1,48 @@
 #!/usr/bin/env janet
-(import chidi)
 (import argparse :prefix "")
+
+(import chidi)
+(import chidi/generate)
 
 (def argparse-params
   ["Chidi CLI. Used to run everything."
    :default {:kind :option
              :default "server"
              :help "Command to run"}
+   "app-name" {:kind :option
+               :help "Name of the app to generate the stub for"}
+   "service" {:kind :option
+              :help "Name of the service to generate"}
+   "setup" {:kind :flag
+            :help "Generate setup with service?"}
    "db-file" {:kind :option 
-         :help "Database file"
-         :default "chidi.db"}
-   "port" {:king :option 
+              :help "Database file"
+              :default "chidi.db"}
+   "port" {:kind :option 
            :help "HTTP server port"
-           :default 8130}])
+           :default 8130}
+   "host" {:kind :option 
+           :help "HTTP server host"
+           :default "localhost"}])
 
 (let [res (argparse ;argparse-params)]
   (unless res
     (os/exit 1))
-  (pp res)
-  (let [{:default command "port" port "db-file" db-file} res]
+  (let [{:default command "host" host "port" port "db-file" db-file} res]
     (case command
-     "server" (chidi/server port db-file)
-     "setup" (chidi/setup db-file)
+     "server" (chidi/app-server port db-file)
+     "setup" (chidi/app-setup db-file)
      "test-server" (let [port (if (not= port 8130) port 8140)
                          db-file (if (not= db-file "chidi.db") db-file "chidi.test.db")]
-                     (with [f (file/open ".test-port" :w)] (file/write f (string port)))
-                     (chidi/server port db-file)) 
+                     (with [f (file/open ".test-port" :w)] (file/write f (string "http://" host ":" port)))
+                     (chidi/app-server port db-file)) 
+     "generate" (if-let [name (res "app-name")]
+                  (chidi/generate/app name)
+                  (if-let [service (res "service")]
+                   (do 
+                     (chidi/generate/service service)
+                     (when (res "setup") (chidi/generate/setup service)))
+                   (error "You have to specifiy service name to generate")))
      (error "This command I do not recognize"))))
 
 

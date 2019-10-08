@@ -1,3 +1,6 @@
+# @todo fixme with mendoza
+(def content
+``
 (import chidi/http/response :as r)
 
 (def not-found 
@@ -9,5 +12,5 @@
   (r/success {:message "Hi. I am Chidi, your soulmate."}))
 
 (def routes 
-     {"/" home-success
-      :not-found not-found})
+  {"/" home-success
+  :not-found not-found})``)
