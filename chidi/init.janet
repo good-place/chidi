@@ -2,17 +2,16 @@
 (import chidi/sql/utils :as su)
 
 (if (os/stat "./app/init.janet")
-  (do 
-    (def- appenv (dofile "./app/init.janet"))
-    (def- setup ((appenv 'setup) :value))
-    (def- server ((appenv 'server) :value))
-
+  (let [appenv (dofile "./app/init.janet")
+        setup (get-in appenv ['setup :value])
+        server (get-in appenv ['server :value])]
     (defglobal 'app-setup 
-      (fn app-setup [db-file]
+      (fn app-setup [db-file] 
+        (unless setup (error "You need to implement setup function in your app"))
         (setup db-file)))
-
     (defglobal 'app-server
       (fn app-server [port db-file]
+        (unless server (error "You need to implement server function in your app"))
         (default port 8130)
         (default db-file "chidi.db")
         (su/open-db db-file)

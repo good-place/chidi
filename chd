@@ -18,20 +18,23 @@
    "db-file" {:kind :option 
               :help "Database file"
               :default "chidi.db"}
-   "port" {:king :option 
+   "port" {:kind :option 
            :help "HTTP server port"
-           :default 8130}])
+           :default 8130}
+   "host" {:kind :option 
+           :help "HTTP server host"
+           :default "localhost"}])
 
 (let [res (argparse ;argparse-params)]
   (unless res
     (os/exit 1))
-  (let [{:default command "port" port "db-file" db-file} res]
+  (let [{:default command "host" host "port" port "db-file" db-file} res]
     (case command
      "server" (chidi/app-server port db-file)
      "setup" (chidi/app-setup db-file)
      "test-server" (let [port (if (not= port 8130) port 8140)
                          db-file (if (not= db-file "chidi.db") db-file "chidi.test.db")]
-                     (with [f (file/open ".test-port" :w)] (file/write f (string port)))
+                     (with [f (file/open ".test-port" :w)] (file/write f (string "http://" host ":" port)))
                      (chidi/app-server port db-file)) 
      "generate" (if-let [name (res "app-name")]
                   (chidi/generate/app name)
