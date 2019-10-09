@@ -12,6 +12,6 @@
 (service/one [:get :patch :delete])
 
 (def routes
-  {"/`` name ``" (-> many body/middleware query-params)
-   "/`` name ``/:id" (-> one body/middleware)})``))
+  {"/`` name ``" (-> many body/parse query-params)
+   "/`` name ``/:id" (-> one body/parse)})``))
 
