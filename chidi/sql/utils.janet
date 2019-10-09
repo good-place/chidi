@@ -2,7 +2,7 @@
 
 (var db nil)
 
-(defn open-db "Opens DB" [db-file] (set db (sql/open db-file)))
+(defn open "Opens DB" [db-file] (set db (sql/open db-file)))
 
 (defn drop-table 
   "Drops table. Optional if exists flag"
@@ -42,11 +42,11 @@
   "Get records from the table by the id"
   (first (select t ["WHERE ID=:id"] {:id id})))
 
-(defn find-records [t bnd]
+(defn find-records [t query]
   "Get records from the table by the id"
-  (select t (if (empty? bnd) 
+  (select t (if (empty? query) 
               [] 
-              ["WHERE" ;(map |(string $ "=:" $) (keys bnd))]) bnd))
+              ["WHERE" ;(map |(string $ "=:" $) (keys query))]) query))
 
 (defn insert 
   "Insert record from body to table"
