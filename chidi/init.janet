@@ -14,7 +14,7 @@
         (unless server (error "You need to implement server function in your app"))
         (default port 8130)
         (default db-file "chidi.db")
-        (su/open-db db-file)
+        (su/open db-file)
 
         (print "> Hi. I am Chidi, your soulmate.")
         (-> server

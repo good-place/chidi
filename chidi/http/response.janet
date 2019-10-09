@@ -23,7 +23,7 @@
   [body &opt headers]
   (response 400 body headers))
 
-(defn not-auth
+(defn not-authorized
   "Returns not autorized response"
   [body &opt headers]
   (response 401 body headers))

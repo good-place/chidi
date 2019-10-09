@@ -1,6 +1,8 @@
+# @todo test
 (import chidi/http/fetch :as fetch)
 
 (var test-host "http://localhost")
+
 (with [f (file/open ".test-port" :r)] 
    (set test-host (file/read f :all)))
 

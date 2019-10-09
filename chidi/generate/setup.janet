@@ -4,7 +4,7 @@
 (import chidi/sql/utils :as su)
 
 (defn perform [dbf]
-  (su/open-db dbf)
+  (su/open dbf)
   (su/drop-table :`` service-name ``)
   (su/create-table :`` service-name `` {:name :TEXT}) # @fixme with real table columns
   (su/begin-transaction)

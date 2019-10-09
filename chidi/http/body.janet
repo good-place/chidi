@@ -1,7 +1,7 @@
 (import json)
 (import chidi/utils :as u)
 
-(defn body 
+(defn parse
   "Parse body into Janet struct under :body key"
   [nextmw]
   (fn [req]
