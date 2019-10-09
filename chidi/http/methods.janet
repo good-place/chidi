@@ -1,7 +1,7 @@
 (import chidi/http/utils :as hu)
 (import chidi/http/response :as hr)
 
-@todo not needed here, but maybe outside it is
+# @todo not needed here, but maybe outside it is
 (defn guards
   "Middleware for quarding only some http methods"
   [nextmw & methods]
