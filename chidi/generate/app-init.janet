@@ -1,3 +1,4 @@
+# @no-test
 (def content
 ``(import circlet)
 (import chidi/http/router :as router)

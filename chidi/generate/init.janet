@@ -8,14 +8,14 @@
 
 (defn service 
   "Generates service stub"
-  [service-name &opt app]
-  (default  app ".")
-  (os/mkdir (path/join app "app" service-name))
-  (with [f (file/open (path/join app "app" service-name "service.janet") :w)]
-    (file/write f 
-                (if (= service-name "common") 
+  [service-name &opt app-path]
+  (default  app-path ".")
+  (os/mkdir (path/join app-path "app" service-name))
+  (with [f (file/open (path/join app-path "app" service-name "service.janet") :w)]
+    (let [content (if (= service-name "common") 
                     common-service/content 
-                    (db-service/content service-name)))))
+                    (db-service/content service-name))]
+      (file/write f content))))
 
 (defn app 
   "Generates app directory structure"
