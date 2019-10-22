@@ -28,9 +28,9 @@ install `chidi` with `jpm`:
 
 When you have  `chidi` installed you can generate new application with it:
 
-`chd generate --app-name test`
+`chd generate --app-name test-chidi`
 
-Then you need to `cd test` and run server:
+Then you need to `cd test-chidi` and run server:
 - / root, which can be used as ping service
 - not-found for everything else
 
@@ -41,21 +41,119 @@ with curl:
 
 `curl -v -H "Accept: application/json" http://127.0.0.1:8130/`
 
-## Service generation
+### Service generation
+
+#### SQLite service
 
 You can generate simple SQLite backed API service with `chidi`:
 
 `chd generate --service people --setup`
 
-This command will create new people service with setup, which needs a little
-more editing to run. @todo explain
+This command will create new people service and setup, which needs a little
+more editing to run. 
+
+Structure of test-chidi project should be:
+
+
+```
+.
+├── app
+│  ├── common
+│  │  └── service.janet
+│  ├── init.janet
+│  └── people
+│     ├── service.janet
+│     └── setup.janet
+└── project.janet
+```
+
+In `project.janet` file you should add the description or dependencies of your
+project.
+
+In the `app` directory is all the code for your project. In the root of this
+directory is the `init.janet` file, which is the main entry point. We need to
+start editing here. Open it and under 5th line, where is the common service
+import add import for newly created service and its setup facilities:
+
+```
+(import app/people/service :as people)
+(import app/people/setup)
+```
+
+Then you have to add routes for newly created service to the routes constant:
+
+```
+(def- routes (merge people/routes common/routes))
+```
+
+You also have to add people setup to app setup:
+```
+(defn setup [db-file]
+  (print "=== Recreating db ===")
+  (app/people/setup/perform db-file)
+  (print "--- Done ---"))
+```
+
+Last thing before we can run our shiny new service is to fix people setup. Open
+`app/people/setup.janet` and fix the table definition, for example:
+
+```
+(defn perform [dbf]
+  (su/open dbf)
+  (su/drop-table :people)
+  (su/create-table :people
+    {:name :TEXT :gender :TEXT :height :INTEGER :weight :INTEGER :born :TEXT})
+  (su/close))
+```
+
+Now we can setup the database:
+
+```
+chd setup 
+```
+
+Last thing that needs to be fixed are the keys which are allowed for db
+operations in `app/people/service.janet` on 5th line to:
+
+```
+(service/defservice :people {:allowed-keys [:name :gender :weight :height :born]})
+```
+
+And run our first db service:
+
+```
+chd 
+```
+
+In the second terminal, check if everything is running:
+
+```
+curl -v -H "Accept: application/json" http://127.0.0.1:8130/people
+=> []
+```
+
+You can see that our db is empty, let's add first person:
+
+```
+curl -v --request POST -H "Accept: application/json" --data "{\"name\": \"Prima Prvy\", \"gender\": \"all\", \"weight\": 99, \"height\": 199, \"born\": \"1980-04-24\"}" "http://127.0.0.1:8130/people"
+=> {"id":1,"name":"Prima Prvy","born":"1980-04-24","gender":"all","weight":99,"height":199}
+```
+
+Now check if it is there:
+
+```
+curl -v -H "Accept: application/json" http://127.0.0.1:8130/people
+=> [{"id":1,"name":"Prima Prvy","born":"1980-04-24","gender":"all","weight":99,"height":199}]
+```
+
+As you can see our first person is stored with our service.
 
 ## TODO
 
 - [ ] @todo add more documentation
 - [ ] @todo add application tests with embedded circlet server
-- [ ] @todo add library tests
 - [ ] @todo generate file contents with mdz
+- [x] @todo add library tests
 - [x] make chd binary only binary with argparse
 - [x] remove test app and tests
 - [x] make standalone lib
