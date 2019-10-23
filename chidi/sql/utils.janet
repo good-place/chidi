@@ -5,13 +5,14 @@
 (defn open "Opens DB" [db-file] (set db (sql/open db-file)))
 
 (defn drop-table 
-  "Drops table. Optional if exists flag"
+  "Drops table if exists"
   [t]
   (sql/eval db (string "DROP TABLE IF EXISTS " t " ;")))
 
 (defn create-table 
   "Creates table with columns. Auto increment id"
   [t columns]
+  (when (empty? columns) (error "Cannot create table without columns"))
   (sql/eval db
             (string/join
               ["CREATE TABLE"  t "(id INTEGER PRIMARY KEY AUTOINCREMENT,"
@@ -51,6 +52,7 @@
 (defn insert 
   "Insert record from body to table"
   [t body]
+  (when (empty? body) (error "Cannot insert empty record"))
   (sql/eval db (string/join ["INSERT INTO" t "(" (string/join (keys body) ", ") 
                              ") VALUES (" (string/join (map |(string ":" $) (keys body)) ",") ");"] " ")
             body)
@@ -59,6 +61,7 @@
 (defn update 
   "Update record with id from body in table"
   [t id body]
+  (when (empty? body) (error "Cannot update with empty record"))
   (sql/eval db (string/join ["UPDATE" t " SET " (string/join (map |(string $ "=:" $) (keys body)) ",")
                              "WHERE id=:id;"] " ")
             (merge body {:id id})))
