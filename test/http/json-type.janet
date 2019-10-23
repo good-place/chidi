@@ -13,7 +13,7 @@
   (test "does nothing on all content type"
         (deep= ((chidi/http/json-type/only identity) @{:headers {"Accept" "*/*"}}) 
               @{:headers {"Accept" "*/*"}}))
-  (test "responses not supported on wrong content type"
+  (test "responses with not supported on wrong content type"
         (deep= ((chidi/http/json-type/only identity) @{:headers {"Accept" "text/html"}}) 
               {:headers @{"Content-Type" "application/json"} :status 415 :body @"{\"message\":\"text/htmlis not supported, please use 'application/json' or '*/*\"}"})))
 

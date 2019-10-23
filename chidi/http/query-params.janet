@@ -1,10 +1,12 @@
-(import chidi/utils :as u)
-(import chidi/http/utils :as hu)
+(import chidi/utils :as utils)
+(import chidi/http/utils :as http/utils)
+(import chidi/http/response :as http/response)
 
 (def- query-string-grammar
   (peg/compile 
        {:eql "=" :sep "&" :content '(some (if-not (+ :eql :sep) 1))
-        :main '(some (* (* ':content :eql ':content) (any :sep)))}))
+        :main '(some (+ (* ':content :eql ':content :sep)
+                        (* ':content :eql ':content -1)))}))
 
 (defn- parse-query-string 
   "Parses query string into table. Keywordize keys and decode values"
@@ -12,8 +14,8 @@
   (-?>> query-string
         (peg/match query-string-grammar)
         (apply table)
-        (u/map-keys keyword)
-        (u/map-vals hu/decode)))
+        (utils/map-keys keyword)
+        (utils/map-vals http/utils/decode)))
 
 (defn parse
   "Parses query string into janet struct under :query-params key. 
@@ -24,7 +26,9 @@
       (unless (empty? query-string)
         (-?>> query-string
               parse-query-string
-              (put req :query-params)))
-     (nextmw req))))
+              (put req :query-params))
+        (if (nil? (req :query-params)) 
+          (http/response/bad-request {:message "Query params have invalid format"})
+          (nextmw req))))))
 
 

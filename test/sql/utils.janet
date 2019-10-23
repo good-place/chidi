@@ -2,6 +2,7 @@
 (import chidi/sql/utils)
 
 (def tbl "chidi-test.db")
+
 (deftest "open"
   (test "opens db and sets it" 
         (do 
