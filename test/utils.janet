@@ -34,5 +34,5 @@
           ([err] (= err "Data must be dictionary"))))
   (test "errors on non indexed keys" 
         (try 
-          (chidi/utils/select-keys [1 2 3 {:a :b}] 1)
-          ([err] (= err "Data must be dictionary")))) )
+          (chidi/utils/select-keys {1 2 3 4 5 {:a :b}} 1)
+          ([err] (= err "Keys must be indexed")))))
