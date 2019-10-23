@@ -150,10 +150,11 @@ As you can see our first person is stored with our service.
 
 ## TODO
 
-- [ ] @todo add more documentation
+- [ ] @todo refactor as much as possible to standalone libs
 - [ ] @todo add application tests with embedded circlet server
 - [ ] @todo generate file contents with mdz
-- [x] @todo add library tests
+- [x] add more documentation
+- [x] add library tests
 - [x] make chd binary only binary with argparse
 - [x] remove test app and tests
 - [x] make standalone lib
