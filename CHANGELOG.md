@@ -4,6 +4,7 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 
+- start with testing service macros (dead-end)
 - add json-type and query-params middleware checks
 - add sql utils validations
 
