@@ -1,6 +1,4 @@
-# @no-test
-(def content
-``(import circlet)
+(import circlet)
 (import chidi/http/router :as router)
 (import chidi/http/json-type :as json-type)
 (import chidi/sql/utils :as su)
@@ -14,9 +12,9 @@
   (error "No setup defined")
   (print "--- Done ---"))
 
-(def server 
+(def server
   (-> routes
-      router/make 
-      json-type/only 
-      circlet/logger))``)
+      router/make
+      json-type/only
+      circlet/logger))
 

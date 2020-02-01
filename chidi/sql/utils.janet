@@ -4,12 +4,12 @@
 
 (defn open "Opens DB" [db-file] (set db (sql/open db-file)))
 
-(defn drop-table 
+(defn drop-table
   "Drops table if exists"
   [t]
   (sql/eval db (string "DROP TABLE IF EXISTS " t " ;")))
 
-(defn create-table 
+(defn create-table
   "Creates table with columns. Auto increment id"
   [t columns]
   (when (empty? columns) (error "Cannot create table without columns"))
@@ -20,12 +20,12 @@
                ");"]
               " ")))
 
-(defn begin-transaction 
+(defn begin-transaction
   "Begins transaction"
   []
   (sql/eval db "BEGIN TRANSACTION"))
 
-(defn end-transaction 
+(defn end-transaction
   "Ends transaction"
   []
   (sql/eval db "END TRANSACTION"))
@@ -41,24 +41,24 @@
 
 (defn get-record [t id]
   "Get records from the table by the id"
-  (first (select t ["WHERE ID=:id"] {:id id})))
+  (when-let [[r] (select t ["WHERE ID=:id"] {:id id})] r))
 
 (defn find-records [t query]
   "Get records from the table by the id"
-  (select t (if (empty? query) 
-              [] 
+  (select t (if (empty? query)
+              []
               ["WHERE" ;(map |(string $ "=:" $) (keys query))]) query))
 
-(defn insert 
+(defn insert
   "Insert record from body to table"
   [t body]
   (when (empty? body) (error "Cannot insert empty record"))
-  (sql/eval db (string/join ["INSERT INTO" t "(" (string/join (keys body) ", ") 
+  (sql/eval db (string/join ["INSERT INTO" t "(" (string/join (keys body) ", ")
                              ") VALUES (" (string/join (map |(string ":" $) (keys body)) ",") ");"] " ")
             body)
   (sql/last-insert-rowid db))
 
-(defn update 
+(defn update
   "Update record with id from body in table"
   [t id body]
   (when (empty? body) (error "Cannot update with empty record"))
@@ -66,7 +66,7 @@
                              "WHERE id=:id;"] " ")
             (merge body {:id id})))
 
-(defn delete 
+(defn delete
   "Delete record with id from table"
   [t id]
   (sql/eval db (string/join ["DELETE FROM" t "WHERE id=:id;"] " ") {:id id}))

@@ -1,9 +1,9 @@
 (import tester :prefix "")
-(import chidi/service)
+(import ../chidi/service)
 
 (deftest "defservice macro"
-  (test "expands" 
-        (= (macex1 '(chidi/service/defservice :people))
+  (test "expands"
+        (= (macex1 '(service/defservice :people))
            '(tuple (def name :people) (def sqt :people) (defn allowed-keys [&] identity)))))
 
 # @todo how to test this?

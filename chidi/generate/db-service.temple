@@ -1,0 +1,13 @@
+(import chidi/service :as service)
+(import chidi/http/body :as body)
+(import chidi/http/query-params :as query-params)
+
+(service/defservice :{- (args :name) -} {:allowed-keys []}) # @fixme add allowed keys
+
+(service/many [:get :post])
+
+(service/one [:get :patch :delete])
+
+(def routes
+  {"/{- (args :name) -} " (-> many body/parse query-params/parse)
+   "/{- (args :name) -}/:id" (-> one body/parse)})
