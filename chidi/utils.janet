@@ -1,10 +1,10 @@
 (defn- assert-dictionary [t data]
-  (unless (dictionary? data) (error (string t " must be dictionary"))))
+  (assert (dictionary? data) (string t " must be dictionary")))
 
 (defn- assert-indexed [t data]
-  (unless (indexed? data) (error (string t " must be indexed"))))
+  (assert (indexed? data) (string t " must be indexed")))
 
-(defn map-keys 
+(defn map-keys
   "Returns new struct with f applied to dictionary's keys"
   [f data]
   (assert-dictionary "Data" data)
@@ -24,7 +24,7 @@
        table
        freeze))
 
-(defn select-keys 
+(defn select-keys
   "Returns new struct with selected keys from dictionary"
   [data keyz]
   (assert-dictionary "Data" data) (assert-indexed "Keys" keyz)
