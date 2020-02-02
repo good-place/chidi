@@ -41,7 +41,7 @@
 
 (defn get-record [t id]
   "Get records from the table by the id"
-  (when-let [[r] (select t ["WHERE ID=:id"] {:id id})] r))
+  (first (select t ["WHERE ID=:id"] {:id id})))
 
 (defn find-records [t query]
   "Get records from the table by the id"
