@@ -8,13 +8,16 @@
 (import chidi/generate/project :as project)
 (import chidi/generate/app-init :as app-init)
 
+(defmacro with-file-out [file &body]
+  (with-syns [f]
+    (with [,f (file/open ,file :w)]
+      (withdyns [:out ,f] ,;body))))
 
 (defn setup
   "Generates service setup"
   [service-name]
   (print "Generating new setup for -> " service-name " <-")
-  (with [f (file/open (path/join "app" service-name "setup.janet") :w)]
-    (setdyn :out f)
+  (with-file-out (path/join "app" service-name "setup.janet")
     (setup/render :name service-name)))
 
 (defn service
@@ -23,11 +26,10 @@
   (default  app-path ".")
   (print "Generating new service -> " service-name " <-")
   (os/mkdir (path/join app-path "app" service-name))
-  (with [f (file/open (path/join app-path "app" service-name "service.janet") :w)]
-    (with-dyns [:out f]
-      (if (= service-name "common")
+  (with-file-out (path/join app-path "app" service-name "service.janet")
+    (if (= service-name "common")
           (common-service/render)
-          (db-service/render :name service-name)))))
+          (db-service/render :name service-name))))
 
 (defn app
   "Generates app directory structure"
@@ -35,11 +37,11 @@
   (print "Generating new app -> " name " <-")
   (os/mkdir name)
   (os/mkdir (path/join name "app"))
-  (with [f (file/open (path/join name "project.janet") :w)]
-    (with-dyns [:out f] (project/render :name name)))
-  (with [f (file/open (path/join name "app" "init.janet") :w)]
-    (with-dyns [:out f] (app-init/render)))
+  (with-file-out (path/join name "project.janet")
+    (project/render :name name))
+  (with-file-out (path/join name "app" "init.janet")
+    (app-init/render))
   (service "common" name)
   (print "App " name " generated")
-  (print "To start work with it cd " name " and run chd --help"))
+  (printf "To start work with it cd %s and run chd --help" name))
 
