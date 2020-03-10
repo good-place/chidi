@@ -47,15 +47,15 @@
                 ~(let [record (,sql/utils/get-record sqt id)]
                    (if record
                      (,http/response/success record)
-                     (,http/response/not-found {:message (string "Person with id " id " has not been found")})))
+                     (,http/response/not-found {:message (string sqt " with id " id " has not been found")})))
                 ~(,http/response/method-not-allowed {:message "Method GET is not allowed"}))
         "PATCH" ,(if (has-method? :patch)
                  ~(do
                     (,sql/utils/update sqt id body)
-                    (,http/response/success {:message (string "Person id " id " was successfuly updated")}))
+                    (,http/response/success {:message (string sqt " id " id " was successfuly updated")}))
                  ~(,http/response/method-not-allowed {:message "Method PATCH is not allowed"}))
         "DELETE" ,(if (has-method? :delete)
                    ~(do
                       (,sql/utils/delete sqt id)
-                      (,http/response/success {:message (string "Person id " id " was successfuly deleted")}))
+                      (,http/response/success {:message (string sqt " id " id " was successfuly deleted")}))
                    ~(,http/response/method-not-allowed {:message "Method PATCH is not allowed"}))))))
