@@ -2,16 +2,17 @@
 (import temple)
 
 (temple/add-loader)
+
 (import chidi/generate/setup :as setup)
 (import chidi/generate/db-service :as db-service)
 (import chidi/generate/common-service :as common-service)
 (import chidi/generate/project :as project)
 (import chidi/generate/app-init :as app-init)
 
-(defmacro with-file-out [file &body]
-  (with-syns [f]
-    (with [,f (file/open ,file :w)]
-      (withdyns [:out ,f] ,;body))))
+(defmacro with-file-out [file & body]
+  (with-syms [f]
+    ~(with [,f (file/open ,file :w)]
+       (with-dyns [:out ,f] ,;body))))
 
 (defn setup
   "Generates service setup"
