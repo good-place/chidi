@@ -21,6 +21,7 @@
   (default app-path ".")
   (print "Generating new service -> " service-name " <-")
   (os/mkdir (path/join app-path "app" service-name))
+  (print "Creating new store for service -> " service-name " <-")
   (with-file-out (path/join app-path "app" service-name "service.janet")
     (if (= service-name "common")
       (common-service/render)

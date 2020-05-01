@@ -23,8 +23,8 @@
        (case method
         "GET" ,(if (has-method? :get)
                 ~(let [records (if qp
-                                 (:retrieve store qp {:populate? true})
-                                 (:retrieve store :all {:populate? true}))]
+                                 (:retrieve store qp @{:id? true})
+                                 (:retrieve store :all @{:id? true}))]
                    (,http/response/success records))
                 ~(,http/response/method-not-allowed {:message "Method GET is not allowed"}))
         "POST" ,(if (has-method? :post)
