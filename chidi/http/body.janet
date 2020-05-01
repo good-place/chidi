@@ -9,6 +9,6 @@
       (unless (empty? b)
         (->> b
              json/decode
-             (u/map-keys keyword)
+             freeze
              (put req :body))))
     (nextmw req)))

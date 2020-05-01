@@ -1,9 +1,9 @@
 (import path)
 (import temple)
+(import mansion/store :as store)
 
 (temple/add-loader)
 
-(import chidi/generate/setup :as setup)
 (import chidi/generate/db-service :as db-service)
 (import chidi/generate/common-service :as common-service)
 (import chidi/generate/project :as project)
@@ -14,23 +14,18 @@
     ~(with [,f (file/open ,file :w)]
        (with-dyns [:out ,f] ,;body))))
 
-(defn setup
-  "Generates service setup"
-  [service-name]
-  (print "Generating new setup for -> " service-name " <-")
-  (with-file-out (path/join "app" service-name "setup.janet")
-    (setup/render :name service-name)))
-
 (defn service
   "Generates service stub"
-  [service-name &opt app-path]
-  (default  app-path ".")
+  [service-name &opt {:to-index to-index :app-path app-path}]
+  (default to-index [])
+  (default app-path ".")
   (print "Generating new service -> " service-name " <-")
   (os/mkdir (path/join app-path "app" service-name))
   (with-file-out (path/join app-path "app" service-name "service.janet")
     (if (= service-name "common")
-          (common-service/render)
-          (db-service/render :name service-name))))
+      (common-service/render)
+      (with [s (store/create service-name @{:to-index to-index})]
+        (db-service/render :name service-name)))))
 
 (defn app
   "Generates app directory structure"
@@ -42,7 +37,7 @@
     (project/render :name name))
   (with-file-out (path/join name "app" "init.janet")
     (app-init/render))
-  (service "common" name)
+  (service "common" {:app-path name})
   (print "App " name " generated")
   (printf "To start work with it cd %s and run chd --help" name))
 

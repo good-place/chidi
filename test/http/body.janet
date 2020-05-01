@@ -8,5 +8,5 @@
         (= (type (body/parse identity)) :function))
   (test "decodes body"
         (deep= ((body/parse identity) @{:body "{\"a\": 1}"})
-              @{:body {:a 1}})))
+              @{:body {"a" 1}})))
 

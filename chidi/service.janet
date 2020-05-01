@@ -1,6 +1,6 @@
 # @todo test
+(import mansion/store :as ms)
 (import chidi/utils :as utils)
-(import chidi/sql/utils :as sql/utils)
 (import chidi/http/response :as http/response)
 
 (defmacro defservice
@@ -8,11 +8,8 @@
   [name &opt storage]
   (default storage {})
   ~(tuple
-     (def name ,name)
-     (def sqt ,(or (storage :table) name))
-     ,(if-let [ak (storage :allowed-keys)]
-        ~(defn allowed-keys [d] (,utils/select-keys d ,(storage :allowed-keys)))
-        '(defn allowed-keys [&] identity))))
+    (def name ,name)
+    (def store (,ms/open ,(string name)))))
 
 (defmacro- has-method [methods]
   ~(defn has-method? [method] (some |(= $ method) ,methods)))
@@ -26,13 +23,13 @@
        (case method
         "GET" ,(if (has-method? :get)
                 ~(let [records (if qp
-                                 (,sql/utils/find-records sqt (allowed-keys qp))
-                                 (,sql/utils/get-records sqt))]
+                                 (:retrieve store qp {:populate? true})
+                                 (:retrieve store :all {:populate? true}))]
                    (,http/response/success records))
                 ~(,http/response/method-not-allowed {:message "Method GET is not allowed"}))
         "POST" ,(if (has-method? :post)
-                 ~(let [id (,sql/utils/insert sqt (allowed-keys body))
-                        p (,sql/utils/get-record sqt id)]
+                 ~(let [id (:save store body)
+                        p (:load store id)]
                     (,http/response/created p {"Location" (string "/" name "/" id)}))
                  ~(,http/response/method-not-allowed {:message "Method POST is not allowed"}) )))))
 
@@ -44,18 +41,18 @@
      (let [{:method method :query-params qp :body body :params {:id id}} req]
        (case method
         "GET" ,(if (has-method? :get)
-                ~(let [record (,sql/utils/get-record sqt id)]
+                ~(let [record (:load store id)]
                    (if record
                      (,http/response/success record)
-                     (,http/response/not-found {:message (string sqt " with id " id " has not been found")})))
+                     (,http/response/not-found {:message (string name " with id " id " has not been found")})))
                 ~(,http/response/method-not-allowed {:message "Method GET is not allowed"}))
         "PATCH" ,(if (has-method? :patch)
                  ~(do
-                    (,sql/utils/update sqt id body)
-                    (,http/response/success {:message (string sqt " id " id " was successfuly updated")}))
+                    (:save store id body)
+                    (,http/response/success {:message (string name " id " id " was successfuly updated")}))
                  ~(,http/response/method-not-allowed {:message "Method PATCH is not allowed"}))
         "DELETE" ,(if (has-method? :delete)
                    ~(do
-                      (,sql/utils/delete sqt id)
-                      (,http/response/success {:message (string sqt " id " id " was successfuly deleted")}))
+                      (:save store [id nil])
+                      (,http/response/success {:message (string name " id " id " was successfuly deleted")}))
                    ~(,http/response/method-not-allowed {:message "Method PATCH is not allowed"}))))))

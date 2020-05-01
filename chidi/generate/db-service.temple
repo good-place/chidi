@@ -2,7 +2,7 @@
 (import chidi/http/body :as body)
 (import chidi/http/query-params :as query-params)
 
-(service/defservice :{- (args :name) -} {:allowed-keys []}) # @fixme add allowed keys
+(service/defservice :{- (args :name) -} {:to-index (args :to-index)})
 
 (service/many [:get :post])
 

@@ -9,8 +9,6 @@
 
  Options:
   server: to run circlet
-  test-server: to run test-circlet
-  setup: to run db setup
   generate: to generate app or service```
    :default {:kind :option
              :default "server"
@@ -19,11 +17,9 @@
                :help "Name of the app to generate the stub for"}
    "service" {:kind :option
               :help "Name of the service to generate"}
-   "setup" {:kind :flag
-            :help "Generate setup with service?"}
-   "db-file" {:kind :option
-              :help "Database file"
-              :default "chidi.db"}
+   "to-index" {:kind :option
+               :help "What fields to index in store"
+               :default []}
    "port" {:kind :option
            :help "HTTP server port"
            :default 8130}
@@ -34,20 +30,13 @@
 (let [res (argparse ;argparse-params)]
   (unless res
     (os/exit 1))
-  (let [{:default command "host" host "port" port "db-file" db-file} res]
+  (let [{:default command "host" host "port" port} res]
     (case command
-     "server" (chidi/app-server port db-file)
-     "setup" (chidi/app-setup db-file)
-     "test-server" (let [port (if (not= port 8130) port 8140)
-                         db-file (if (not= db-file "chidi.db") db-file "chidi.test.db")]
-                     (with [f (file/open ".test-port" :w)] (file/write f (string "http://" host ":" port)))
-                     (chidi/app-server port db-file))
+     "server" (chidi/app-server port)
      "generate" (if-let [name (res "app-name")]
                   (generate/app name)
                   (if-let [service (res "service")]
-                   (do
-                     (generate/service service)
-                     (when (res "setup") (generate/setup service)))
+                   (generate/service service {:to-index (tuple ;(string/split "," (res "to-index")))})
                    (error "You have to specifiy service name to generate")))
      (error "This command I do not recognize"))))
 

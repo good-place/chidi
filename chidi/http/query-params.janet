@@ -9,14 +9,15 @@
   [nextmw]
   (fn [req]
     (let [query-string (req :query-string)]
-      (unless (empty? query-string)
-        (-?>> query-string
-              uri/parse-query
-              (utils/map-keys keyword)
-              (utils/map-vals uri/unescape)
-              (put req :query-params))
-        (if (nil? (req :query-params))
-          (http/response/bad-request {:message "Query params have invalid format"})
-          (nextmw req))))))
+      (if (empty? query-string)
+        (nextmw req)
+        (do
+          (-?>> query-string
+            uri/parse-query
+            (utils/map-vals uri/unescape)
+            (put req :query-params))
+          (if (nil? (req :query-params))
+            (http/response/bad-request {:message "Query params have invalid format"})
+            (nextmw req)))))))
 
 
