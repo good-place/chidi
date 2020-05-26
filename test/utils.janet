@@ -5,7 +5,8 @@
   (test "returns keys mapped with function"
         (= (utils/map-keys string {1 2 3 4}) {"1" 2 "3" 4}))
   (test "returns keys mapped with function in nested struct"
-        (= (utils/map-keys string {1 2 3 {:a :b}}) {"1" 2 "3" {:a :b}}))
+        (= (utils/map-keys string {1 2 3 {:a :b :c {:d 3}}})
+           {"1" 2 "3" {"a" :b "c" {"d" 3}}}))
   (test "errors on non dictionary data"
         (try
           (utils/map-keys string [1 2 3 {:a :b}])

@@ -8,7 +8,8 @@
   "Returns new struct with f applied to dictionary's keys"
   [f data]
   (assert-dictionary "Data" data)
-  (-> (seq [[k v] :pairs data] [(f k) v])
+  (-> (seq [[k v] :pairs data]
+       [(f k) (if (dictionary? v) (map-keys f v) v)])
        flatten
        splice
        table
