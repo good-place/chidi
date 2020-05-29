@@ -1,5 +1,4 @@
 (import circlet)
-(import mansion/store :as store)
 
 (if (os/stat "./app/init.janet")
   (let [appenv (dofile "./app/init.janet")
@@ -9,7 +8,12 @@
         (unless server (error "You need to implement server function in your app"))
         (default port 8130)
         (print "> Hi. I am Chidi, your soulmate.")
-          (-> server (circlet/server port)))))
-  (let [err (fn [&] (error "There is no app module"))]
-    (defglobal 'app-setup err)
-    (defglobal 'app-server err)))
+          (-> (server) (circlet/server port)))))
+  (defglobal 'app-server (fn [&] (error "There is no app module"))))
+(if (os/stat "./app/reception.janet")
+  (let [rcpenv (dofile "./app/reception.janet")
+        run (get-in rcpenv ['run :value])]
+    (defglobal 'run-reception
+      (fn run-reception []
+        (if run (run) (print "I cannot run reception")))))
+  (defglobal 'run-reception (fn [&] (print "There is no reception module"))))

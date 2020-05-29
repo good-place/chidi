@@ -1,6 +1,6 @@
 (import path)
 (import temple)
-(import mansion/store :as store)
+(import mansion/buffet :as buffet)
 
 (temple/add-loader)
 
@@ -21,11 +21,11 @@
   (default app-path ".")
   (print "Generating new service -> " service-name " <-")
   (os/mkdir (path/join app-path "app" service-name))
-  (print "Creating new store for service -> " service-name " <-")
+  (print "Creating new buffet for service -> " service-name " <-")
   (with-file-out (path/join app-path "app" service-name "service.janet")
     (if (= service-name "common")
       (common-service/render)
-      (with [s (store/create service-name @{:to-index to-index})]
+      (with [s (buffet/create service-name @{:to-index to-index})]
         (db-service/render :name service-name)))))
 
 (defn app

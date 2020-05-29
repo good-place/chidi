@@ -33,6 +33,7 @@
   (let [{:default command "host" host "port" port} res]
     (case command
      "server" (chidi/app-server port)
+     "reception" (chidi/run-reception)
      "generate" (if-let [name (res "app-name")]
                   (generate/app name)
                   (if-let [service (res "service")]

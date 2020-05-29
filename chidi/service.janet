@@ -1,15 +1,13 @@
 # @todo test
-(import mansion/store :as ms)
 (import chidi/utils :as utils)
 (import chidi/http/response :as http/response)
 
 (defmacro defservice
   "Defines new service" # @todo document
-  [name &opt storage]
-  (default storage {})
+  [name]
   ~(tuple
     (def name ,name)
-    (def store (,ms/open ,(string name)))))
+    (defn visitor [] (def v (:visit (reception) (string ,name) (string ,name "-service"))) (pp v) v)))
 
 (defmacro- has-method [methods]
   ~(defn has-method? [method] (some |(= $ method) ,methods)))
@@ -23,13 +21,13 @@
        (case method
         "GET" ,(if (has-method? :get)
                 ~(let [records (if qp
-                                 (:retrieve store qp @{:id? true})
-                                 (:retrieve store :all @{:id? true}))]
+                                 (:retrieve (visitor) qp @{:id? true})
+                                 (:retrieve (visitor) :all @{:id? true}))]
                    (,http/response/success records))
                 ~(,http/response/method-not-allowed {:message "Method GET is not allowed"}))
         "POST" ,(if (has-method? :post)
-                 ~(let [id (:save store body)
-                        p (:load store id)]
+                 ~(let [id (:save (visitor) body)
+                        p (:load (visitor) id)]
                     (,http/response/created p {"Location" (string "/" name "/" id)}))
                  ~(,http/response/method-not-allowed {:message "Method POST is not allowed"}) )))))
 
@@ -41,18 +39,18 @@
      (let [{:method method :query-params qp :body body :params {:id id}} req]
        (case method
         "GET" ,(if (has-method? :get)
-                ~(let [record (:load store id)]
+                ~(let [record (:load (visitor) id)]
                    (if record
                      (,http/response/success record)
                      (,http/response/not-found {:message (string name " with id " id " has not been found")})))
                 ~(,http/response/method-not-allowed {:message "Method GET is not allowed"}))
         "PATCH" ,(if (has-method? :patch)
                  ~(do
-                    (:save store id body)
+                    (:save (visitor) id body)
                     (,http/response/success {:message (string name " id " id " was successfuly updated")}))
                  ~(,http/response/method-not-allowed {:message "Method PATCH is not allowed"}))
         "DELETE" ,(if (has-method? :delete)
                    ~(do
-                      (:save store [id nil])
+                      (:save (visitor) [id nil])
                       (,http/response/success {:message (string name " id " id " was successfuly deleted")}))
                    ~(,http/response/method-not-allowed {:message "Method PATCH is not allowed"}))))))
