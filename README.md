@@ -39,7 +39,6 @@ Then you need to `cd test-chidi` and run server:
 ## TODO
 
 - [ ] come with better story
-- [ ] remove all the json service shit
 
 [Janet]: https://janet-lang.org/index.html
 [Mendoza]: https://github.com/bakpakin/mendoza
