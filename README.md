@@ -38,6 +38,7 @@ Then you need to `cd test-chidi` and run server:
 
 ## TODO
 
+- [ ] just the server
 - [ ] come with better story
 
 [Janet]: https://janet-lang.org/index.html
