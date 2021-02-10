@@ -1,8 +1,11 @@
-(import tester :prefix "")
-(import temple)
+(import spork/temple :prefix "")
+(import spork/test :prefix "")
 
-(temple/add-loader)
+(add-loader)
 (import ../../chidi/generate/db-service)
 
-(deftest "generating"
-  (test "render" (let [b @[]] (with-dyns [:out b] (db-service/render :name "test") b))))
+(start-suite 7)
+
+(assert
+  (= (capture-stdout (db-service/render :name "test"))
+     "render"))

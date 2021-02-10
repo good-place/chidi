@@ -1,9 +1,9 @@
-(import tester :prefix "")
-(import temple)
+(import spork/temple :prefix "")
+(import spork/test :prefix "")
 
-(temple/add-loader)
+(add-loader)
 (import ../../chidi/generate/project)
 
-(deftest "generating"
-  (test "render" (let [b @[]] (with-dyns [:out b] (project/render :name "test") b))))
+(start-suite 8)
 
+(assert (= (project/render :name "test") "render"))

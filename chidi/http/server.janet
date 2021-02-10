@@ -1,8 +1,9 @@
 (import /chidi/http/response :prefix "" :export true)
 
-(defn- caprl [m u v]
+(defn- caprl [m u q v]
   {:method m
    :uri u
+   :query-string q
    :http-version v})
 (defn- caph [n c] {n c})
 (defn- colhs [& hs] {:headers (freeze (merge ;hs))})
@@ -15,7 +16,8 @@
       :http "HTTP/"
       :to-sp (* '(to :sp) :sp)
       :to-crlf (* '(to :crlf) :crlf)
-      :request (/ (* :to-sp :to-sp :http :to-crlf) ,caprl)
+      :request (/ (* :to-sp '(to (+ "?" :sp))
+                     (any "?") :to-sp :http :to-crlf) ,caprl)
       :header (/ (* '(to ":") ": " :to-crlf) ,caph)
       :headers (/ (* (some :header) :crlf) ,colhs)
       :body (/ '(any (if-not -1 1)) ,capb)
@@ -40,6 +42,7 @@
   (fn [stream]
     (->> (net/read stream 4096) # 4 KB is enough for everyone
          parse-request
+         tracev
          ensure-length
          handler
          (:write stream))))

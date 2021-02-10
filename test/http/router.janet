@@ -1,13 +1,16 @@
-(import tester :prefix "")
+(import spork/test :prefix "")
 (import ../../chidi/http/router)
 
-(deftest "router middleware"
-  (test "creates body middleware"
-        (not (nil? (router/make {"/" :home :not-found :not-found}))))
-  (test "creates function"
-        (= (type (router/make {"/" :home :not-found :not-found})) :function))
-  (test "routes to home"
-        (= ((router/make {"/" :home :not-found :not-found}) @{:uri "/"}) :home))
-  (test "routes to not-found"
-        (= ((router/make {"/" :home :not-found :not-found}) @{:uri "/not-found"}) :not-found)))
 
+(assert
+  (not (nil? (router/make {"/" :home :not-found :not-found})))
+  "creates router middleware")
+(assert
+  (= (type (router/make {"/" :home :not-found :not-found})) :function)
+  "creates function")
+(assert
+  (= ((router/make {"/" :home :not-found :not-found}) @{:uri "/"}) :home)
+  "routes to home")
+(assert
+  (= ((router/make {"/" :home :not-found :not-found}) @{:uri "/not-found"}) :not-found)
+  "routes to not-found")

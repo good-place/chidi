@@ -9,21 +9,19 @@
   [f data]
   (assert-dictionary "Data" data)
   (-> (seq [[k v] :pairs data]
-       [(f k) (if (dictionary? v) (map-keys f v) v)])
-       flatten
-       splice
-       table
-       freeze))
+        [(f k) (if (dictionary? v) (map-keys f v) v)])
+      flatten
+      splice
+      struct))
 
 (defn map-vals
   "Returns new struct with f applied to dictionary's values"
   [f data]
   (assert-dictionary "Data" data)
   (-> (seq [[k v] :pairs data] [k (f v)])
-       flatten
-       splice
-       table
-       freeze))
+      flatten
+      splice
+      struct))
 
 (defn select-keys
   "Returns new struct with selected keys from dictionary"
