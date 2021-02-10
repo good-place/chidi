@@ -1,4 +1,3 @@
-(import circlet)
 (import trolley)
 
 (defn make
@@ -7,7 +6,6 @@
   (def r (trolley/router routes))
   (fn [req]
     (let [[action params] (r (req :uri))]
-      (if action 
-        ((circlet/middleware action) (put req :params params))
-        ((circlet/middleware (routes :not-found)) req)))))
-
+      (if action
+        (action (put req :params params))
+        ((routes :not-found) req)))))

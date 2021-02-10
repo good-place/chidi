@@ -1,3 +1,5 @@
+# Not needed?
+
 (defn get-method
   "Returns request method as keyword"
   [req]
