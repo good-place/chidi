@@ -2,24 +2,12 @@
 (import argparse :prefix "")
 
 (import chidi)
-(import chidi/generate)
 
 (def argparse-params
-  [```Chidi CLI. Used to run everything.
+  [```
+   Chidi CLI. Used to run everything.
 
- Options:
-  server: to run circlet
-  generate: to generate app or service```
-   :default {:kind :option
-             :default "server"
-             :help "Command to run"}
-   "app-name" {:kind :option
-               :help "Name of the app to generate the stub for"}
-   "service" {:kind :option
-              :help "Name of the service to generate"}
-   "to-index" {:kind :option
-               :help "What fields to index in store"
-               :default []}
+   ```
    "port" {:kind :option
            :help "HTTP server port"
            :default 8130}
@@ -27,18 +15,7 @@
            :help "HTTP server host"
            :default "localhost"}])
 
-(let [res (argparse ;argparse-params)]
-  (unless res
-    (os/exit 1))
-  (let [{:default command "host" host "port" port} res]
-    (case command
-     "server" (chidi/app-server port)
-     "reception" (chidi/run-reception)
-     "generate" (if-let [name (res "app-name")]
-                  (generate/app name)
-                  (if-let [service (res "service")]
-                   (generate/service service {:to-index (tuple ;(string/split "," (res "to-index")))})
-                   (error "You have to specifiy service name to generate")))
-     (error "This command I do not recognize"))))
-
-
+(defn main [&]
+  (def res (argparse ;argparse-params))
+  (def [{"host" host "port" port}] parsed)
+  (chidi/app-server host port))
