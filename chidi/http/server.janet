@@ -42,7 +42,6 @@
   (fn [stream]
     (->> (net/read stream 4096) # 4 KB is enough for everyone
          parse-request
-         tracev
          ensure-length
          handler
          (:write stream))))
