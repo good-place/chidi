@@ -1,3 +1,7 @@
+# This repository is deprecated
+
+Please use latest version on [SourceHut](https://git.sr.ht/~pepe/chidi).
+
 <div style="width: 100%; display: flex; justify-content: center;">
   <img alt="Hi. I am Chidi, your soulmate." src="chidi.png" />
 </div>
